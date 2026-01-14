@@ -77,9 +77,14 @@
   <div class="sidebar">
     <h2>Canais</h2>
 
-    <!-- Player direto pro link que você pediu -->
-    <div class="channel" onclick="changeChannel('https://www.youtube.com/channel/UCZiYbVptd3PVPf4f6eR6UaQ/live')">
+    <!-- CazéTV Embed oficial -->
+    <div class="channel" onclick="changeChannel('https://www.youtube.com/embed/live_stream?channel=UCZiYbVptd3PVPf4f6eR6UaQ')">
       CazéTV
+    </div>
+
+    <!-- Exemplo de outro canal (adicione o ID correto do YouTube) -->
+    <div class="channel" onclick="changeChannel('https://www.youtube.com/embed/live_stream?channel=ID_DO_CANAL_2')">
+      Canal 2
     </div>
 
   </div>
@@ -87,7 +92,8 @@
   <div class="player">
     <iframe 
       id="player"
-      src="https://www.youtube.com/channel/UCZiYbVptd3PVPf4f6eR6UaQ/live"
+      src="https://www.youtube.com/embed/live_stream?channel=UCZiYbVptd3PVPf4f6eR6UaQ"
+      allow="autoplay; encrypted-media"
       allowfullscreen>
     </iframe>
   </div>
