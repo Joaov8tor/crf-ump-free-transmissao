@@ -1,81 +1,102 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CRF+ — Logo Animado</title>
+  <meta charset="UTF-8">
+  <title>IPTV Web Player</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    /* Fundo transparente para usar em sobreposição; se abrir direto no navegador, o fundo ficará branco do navegador. */
-    html,body{height:100%;margin:0;background:transparent}
-    .stage{height:100vh;display:flex;align-items:center;justify-content:center}
-
-    /* Container do logo */
-    .logo{
-      position:relative;
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
-      font-weight:800;
-      font-size:8vw; /* responsivo */
-      color:#ffffff;
-      text-transform:uppercase;
-      letter-spacing:0.02em;
-      user-select:none;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      filter:drop-shadow(0 6px 18px rgba(0,0,0,0.45));
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+      display: flex;
+      height: 100vh;
     }
 
-    /* Texto principal (CRF+) e texto que aparece temporariamente (AO VIVO) */
-    .brand, .live-badge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
-
-    /* base do CRF+ */
-    .brand{transition:opacity .4s linear;}
-
-    /* badge AO VIVO */
-    .live-badge{
-      display:flex;gap:.6rem;align-items:center;font-size:0.26em; /* escala relativa ao .logo */
-      padding:.55em .9em;border-radius:999px;background:rgba(255,0,0,0.95);color:white;
-      transform-origin:center center;opacity:0;scale:0.9; /* inicia escondido */
-      box-shadow:0 8px 20px rgba(0,0,0,0.35);
+    .sidebar {
+      width: 260px;
+      background: #1a1a1a;
+      padding: 10px;
+      overflow-y: auto;
     }
 
-    .dot{width:.8em;height:.8em;border-radius:50%;background:#fff;box-shadow:inset 0 -2px 0 rgba(0,0,0,0.08)}
-
-    /* Sequência de animação: alterna entre mostrar só CRF+ e mostrar CRF+ com badge AO VIVO
-       duração total 6s, roda infinitamente */
-    @keyframes pulseLive {
-      0%   { --brand-opacity:1; --live-opacity:0; --brand-scale:1}
-      60%  { --brand-opacity:1; --live-opacity:0; --brand-scale:1}
-      66%  { --brand-opacity:0.15; --live-opacity:1; --brand-scale:0.98}
-      80%  { --brand-opacity:0.15; --live-opacity:1; --brand-scale:0.98}
-      90%  { --brand-opacity:0.6; --live-opacity:0; --brand-scale:1.02}
-      100% { --brand-opacity:1; --live-opacity:0; --brand-scale:1}
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 10px;
     }
 
-    .logo{animation:pulseLive 30s linear infinite}
-    .brand{opacity:var(--brand-opacity);transform:translate(-50%,-50%) scale(var(--brand-scale));}
-    .live-badge{opacity:var(--live-opacity);transform:translate(-50%,-50%) scale(calc(0.9 + var(--live-opacity) * 0.12));transition:opacity .15s linear, transform .15s linear}
+    .channel {
+      background: #2a2a2a;
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: 0.2s;
+      text-align: center;
+    }
 
-    /* Quando o fundo do documento não for transparente (ex.: ao abrir direto), centralizar melhor com um fundo escuro opcional */
-    .demo-wrap{background:transparent;padding:0}
+    .channel:hover {
+      background: #3a3a3a;
+    }
 
-    /* Responsividade mínima */
-    @media (max-width:520px){ .logo{font-size:14vw} .live-badge{font-size:0.28em;padding:.45em .7em} }
+    .player {
+      flex: 1;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        display: flex;
+        overflow-x: auto;
+      }
+      .channel {
+        min-width: 160px;
+        margin-right: 8px;
+      }
+    }
   </style>
 </head>
+
 <body>
-  <div class="stage">
-    <div class="logo" aria-hidden="false">
-      <div class="brand">CRF+</div>
-      <div class="live-badge" role="status" aria-live="polite">
-        <div class="dot" aria-hidden="true"></div>
-        <div style="font-weight:700">AO VIVO</div>
-      </div>
+
+  <div class="sidebar">
+    <h2>Canais</h2>
+
+    <!-- Player direto pro link que você pediu -->
+    <div class="channel" onclick="changeChannel('https://www.youtube.com/channel/UCZiYbVptd3PVPf4f6eR6UaQ/live')">
+      CazéTV
     </div>
+
   </div>
 
-  <!-- Pequena instrução de uso (comentário):
-       - Para fundo realmente transparente, coloque este HTML dentro de um container com fundo transparente (por exemplo, overlay em OBS) ou use CSS do pai.
-       - Se abrir direto no navegador e quiser ver mais contraste, troque o background do body para #000 ou outra cor.
-  -->
+  <div class="player">
+    <iframe 
+      id="player"
+      src="https://www.youtube.com/channel/UCZiYbVptd3PVPf4f6eR6UaQ/live"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <script>
+    function changeChannel(url) {
+      document.getElementById("player").src = url;
+    }
+  </script>
+
 </body>
 </html>
