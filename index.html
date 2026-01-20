@@ -1,108 +1,128 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>IPTV Web Player</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
+<meta charset="UTF-8">
+<title>Placar Libertadores Overlay</title>
+<style>
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f0f0f;
-      color: #fff;
-      display: flex;
-      height: 100vh;
+        margin: 0;
+        background: transparent;
+        font-family: Arial, Helvetica, sans-serif;
     }
 
-    .sidebar {
-      width: 260px;
-      background: #1a1a1a;
-      padding: 10px;
-      overflow-y: auto;
-    }
-
-    .sidebar h2 {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .channel {
-      background: #2a2a2a;
-      padding: 12px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: 0.2s;
-      text-align: center;
-    }
-
-    .channel:hover {
-      background: #3a3a3a;
-    }
-
-    .player {
-      flex: 1;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    @media (max-width: 768px) {
-      body {
-        flex-direction: column;
-      }
-      .sidebar {
-        width: 100%;
+    .placar {
+        background: linear-gradient(180deg, #0f3d2e, #071a13);
+        border: 3px solid #1aff8c;
+        border-radius: 16px;
+        padding: 18px 36px;
         display: flex;
-        overflow-x: auto;
-      }
-      .channel {
-        min-width: 160px;
-        margin-right: 8px;
-      }
+        align-items: center;
+        gap: 30px;
+        color: white;
+        box-shadow: 0 0 25px rgba(26,255,140,0.4);
     }
-  </style>
-</head>
 
+    .time {
+        text-align: center;
+        min-width: 150px;
+    }
+
+    .time h2 {
+        margin: 0;
+        font-size: 18px;
+        text-transform: uppercase;
+    }
+
+    .gol {
+        font-size: 60px;
+        font-weight: bold;
+        color: #1aff8c;
+    }
+
+    .meio {
+        text-align: center;
+    }
+
+    .tempo {
+        font-size: 26px;
+        font-weight: bold;
+        margin-bottom: 6px;
+    }
+
+    .liberta {
+        font-size: 11px;
+        letter-spacing: 2px;
+        color: #9dffcf;
+    }
+</style>
+</head>
 <body>
 
-  <div class="sidebar">
-    <h2>Canais</h2>
-
-    <!-- CazéTV Embed oficial -->
-    <div class="channel" onclick="changeChannel('https://www.youtube.com/embed/live_stream?channel=UCZiYbVptd3PVPf4f6eR6UaQ')">
-      CazéTV
+<div class="placar">
+    <div class="time">
+        <h2>EC Vitória</h2>
+        <div class="gol" id="homeGol">0</div>
     </div>
 
-    <!-- Exemplo de outro canal (adicione o ID correto do YouTube) -->
-    <div class="channel" onclick="changeChannel('https://www.youtube.com/embed/live_stream?channel=ID_DO_CANAL_2')">
-      Canal 2
+    <div class="meio">
+        <div class="tempo" id="tempo">00:00</div>
+        <div class="liberta">CONMEBOL LIBERTADORES</div>
     </div>
 
-  </div>
+    <div class="time">
+        <h2>Bragantino</h2>
+        <div class="gol" id="awayGol">0</div>
+    </div>
+</div>
 
-  <div class="player">
-    <iframe 
-      id="player"
-      src="https://www.youtube.com/embed/live_stream?channel=UCZiYbVptd3PVPf4f6eR6UaQ"
-      allow="autoplay; encrypted-media"
-      allowfullscreen>
-    </iframe>
-  </div>
+<script>
+let home = 0;
+let away = 0;
+let segundos = 0;
+let rodando = true;
 
-  <script>
-    function changeChannel(url) {
-      document.getElementById("player").src = url;
+const tempoEl = document.getElementById("tempo");
+const homeEl = document.getElementById("homeGol");
+const awayEl = document.getElementById("awayGol");
+
+function atualizarTempo() {
+    let min = Math.floor(segundos / 60);
+    let sec = segundos % 60;
+    tempoEl.textContent =
+        String(min).padStart(2, '0') + ":" + String(sec).padStart(2, '0');
+}
+
+setInterval(() => {
+    if (rodando) {
+        segundos++;
+        atualizarTempo();
     }
-  </script>
+}, 1000);
+
+document.addEventListener("keydown", (e) => {
+    switch (e.key.toLowerCase()) {
+        case " ":
+            rodando = !rodando;
+            break;
+        case "h":
+            home++;
+            homeEl.textContent = home;
+            break;
+        case "a":
+            away++;
+            awayEl.textContent = away;
+            break;
+        case "j":
+            if (home > 0) home--;
+            homeEl.textContent = home;
+            break;
+        case "l":
+            if (away > 0) away--;
+            awayEl.textContent = away;
+            break;
+    }
+});
+</script>
 
 </body>
 </html>
